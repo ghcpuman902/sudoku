@@ -1,11 +1,11 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import useLocalStorage from '../hooks/useLocalStorage';
+// import useLocalStorage from '../hooks/useLocalStorage';
 import SudokuGrid from '../SudokuGrid';
 import { Grid, EMPTY_PUZZLE } from '../../../components/puzzles';
 import { Button } from '@/components/ui/button';
-import { solvers, countSolutions } from '../algorithms';
+import { solvers, countSolutions } from '@/components/algorithms';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -40,43 +40,43 @@ export default function App() {
         });
     }
 
-    const validateGrid = () => {
-        const newInvalidCells: {[key: string]: boolean} = {};
-        for (let i = 0; i < 9; i++) {
-            for (let j = 0; j < 9; j++) {
-                if (grid[i][j] !== '' && grid[i][j] !== '0') {
-                    // Check row
-                    for (let k = 0; k < 9; k++) {
-                        if (k !== j && grid[i][k] === grid[i][j]) {
-                            newInvalidCells[`${i}-${j}`] = true;
-                            newInvalidCells[`${i}-${k}`] = true;
-                        }
-                    }
-                    // Check column
-                    for (let k = 0; k < 9; k++) {
-                        if (k !== i && grid[k][j] === grid[i][j]) {
-                            newInvalidCells[`${i}-${j}`] = true;
-                            newInvalidCells[`${k}-${j}`] = true;
-                        }
-                    }
-                    // Check 3x3 box
-                    const boxRow = Math.floor(i / 3) * 3;
-                    const boxCol = Math.floor(j / 3) * 3;
-                    for (let r = boxRow; r < boxRow + 3; r++) {
-                        for (let c = boxCol; c < boxCol + 3; c++) {
-                            if ((r !== i || c !== j) && grid[r][c] === grid[i][j]) {
+    useEffect(() => {
+        const validateGrid = () => {
+            const newInvalidCells: {[key: string]: boolean} = {};
+            for (let i = 0; i < 9; i++) {
+                for (let j = 0; j < 9; j++) {
+                    if (grid[i][j] !== '' && grid[i][j] !== '0') {
+                        // Check row
+                        for (let k = 0; k < 9; k++) {
+                            if (k !== j && grid[i][k] === grid[i][j]) {
                                 newInvalidCells[`${i}-${j}`] = true;
-                                newInvalidCells[`${r}-${c}`] = true;
+                                newInvalidCells[`${i}-${k}`] = true;
+                            }
+                        }
+                        // Check column
+                        for (let k = 0; k < 9; k++) {
+                            if (k !== i && grid[k][j] === grid[i][j]) {
+                                newInvalidCells[`${i}-${j}`] = true;
+                                newInvalidCells[`${k}-${j}`] = true;
+                            }
+                        }
+                        // Check 3x3 box
+                        const boxRow = Math.floor(i / 3) * 3;
+                        const boxCol = Math.floor(j / 3) * 3;
+                        for (let r = boxRow; r < boxRow + 3; r++) {
+                            for (let c = boxCol; c < boxCol + 3; c++) {
+                                if ((r !== i || c !== j) && grid[r][c] === grid[i][j]) {
+                                    newInvalidCells[`${i}-${j}`] = true;
+                                    newInvalidCells[`${r}-${c}`] = true;
+                                }
                             }
                         }
                     }
                 }
             }
+            setInvalidCells(newInvalidCells);
         }
-        setInvalidCells(newInvalidCells);
-    }
 
-    useEffect(() => {
         validateGrid();
     }, [grid]);
 

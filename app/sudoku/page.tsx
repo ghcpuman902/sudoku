@@ -7,7 +7,7 @@ import usePuzzle from './usePuzzle';
 import { getPuzzles, Grid, EMPTY_PUZZLE } from '../../components/puzzles';
 import { solvers } from '../../components/algorithms';
 
-const GRID_SIZE = 9;
+// const GRID_SIZE = 9;
 
 type Highlight = {
     type: 'cell' | 'row' | 'column' | 'box'
@@ -26,32 +26,32 @@ export default function SudokuSolver() {
         history
     } = usePuzzle(EMPTY_PUZZLE);
 
-    const [selectedPuzzle, setSelectedPuzzle] = useState<Grid>(EMPTY_PUZZLE);
-    const [solving, setSolving] = useState(false);
+    // const [selectedPuzzle, setSelectedPuzzle] = useState<Grid>(EMPTY_PUZZLE);
+    // const [solving, setSolving] = useState(false);
     const [highlight, setHighlight] = useState<Highlight>({ type: 'cell', index: -1 });
-    const [solvingMethod, setSolvingMethod] = useState<string>('defaultSolver');
+    // const [solvingMethod, setSolvingMethod] = useState<string>('defaultSolver');
 
     useEffect(() => {
         setGrid(EMPTY_PUZZLE);
     }, [setGrid]);
 
     const handlePuzzleSelect = (puzzle: Grid) => {
-        setSelectedPuzzle(puzzle);
+        // setSelectedPuzzle(puzzle);
         setGrid(puzzle);
     }
 
-    const solveSudoku = async () => {
-        setSolving(true);
-        const newGrid = grid.map(row => row.slice());
-        const solver = solvers.find(s => s.name === solvingMethod);
-        if (solver) {
-            for await (const updatedGrid of solver.solve(newGrid)) {
-                setGrid(updatedGrid);
-                await new Promise(resolve => setTimeout(resolve, 50));
-            }
-        }
-        setSolving(false);
-    }
+    // const solveSudoku = async () => {
+    //     setSolving(true);
+    //     const newGrid = grid.map(row => row.slice());
+    //     const solver = solvers.find(s => s.name === 'defaultSolver');
+    //     if (solver) {
+    //         for await (const updatedGrid of solver.solve(newGrid)) {
+    //             setGrid(updatedGrid);
+    //             await new Promise(resolve => setTimeout(resolve, 50));
+    //         }
+    //     }
+    //     setSolving(false);
+    // }
 
     const solveNextStep = async () => {
         const newGrid = grid.map(row => row.slice());
@@ -84,7 +84,7 @@ export default function SudokuSolver() {
                 <h1 className="text-2xl font-bold">🧩 Sudoku Solver</h1>
                 
                 <div className="flex space-x-2 bg-gray-100 p-2 rounded-lg">
-                    <Button onClick={solveNextStep} disabled={solving}>▶️ Solve Next Step</Button>
+                    <Button onClick={solveNextStep} disabled={false}>▶️ Solve Next Step</Button>
                     <Button onClick={undo} disabled={historyIndex === 0}>⏪ Undo</Button>
                     <Button onClick={redo} disabled={historyIndex === history.length - 1}>⏩ Redo</Button>
                 </div>

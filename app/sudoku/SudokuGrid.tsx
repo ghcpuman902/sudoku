@@ -29,7 +29,7 @@ interface SudokuGridProps {
 
 const SudokuGrid: React.FC<SudokuGridProps> = ({
     grid,
-    onInputChange,
+    // onInputChange,
     highlight,
     error,
     cellColors,
@@ -38,9 +38,9 @@ const SudokuGrid: React.FC<SudokuGridProps> = ({
     editable,
     filledCount // Add this line
 }) => {
-    const handleChange = (row: number, col: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        onInputChange(row, col, event.target.value);
-    };
+    // const handleChange = (row: number, col: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     onInputChange(row, col, event.target.value);
+    // };
 
     const getCountColor = () => {
         if (filledCount < 10) return 'text-red-500';
