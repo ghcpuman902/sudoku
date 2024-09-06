@@ -1,0 +1,131 @@
+# User Stories for Sudoku Solver Application
+
+## User Story 1: Select a Puzzle
+**As a** user  
+**I want** to select a predefined Sudoku puzzle or start with an empty grid  
+**So that** I can solve different puzzles or create my own
+
+### Acceptance Criteria
+- **Given** I am on the Sudoku solver page
+- **When** I click on "Default Puzzle 1"
+- **Then** the grid should be populated with the first default puzzle
+
+- **Given** I am on the Sudoku solver page
+- **When** I click on "Default Puzzle 2"
+- **Then** the grid should be populated with the second default puzzle
+
+- **Given** I am on the Sudoku solver page
+- **When** I click on "Empty Puzzle"
+- **Then** the grid should be empty and editable
+
+## User Story 2: Input Validation
+**As a** user  
+**I want** the application to validate my inputs  
+**So that** I can avoid entering invalid numbers in the Sudoku grid
+
+### Acceptance Criteria
+- **Given** I am entering a number in the grid
+- **When** I enter a number outside the range 1-9
+- **Then** I should see an error indicating the invalid input
+
+- **Given** I am entering a number in the grid
+- **When** I enter a number that already exists in the same row, column, or 3x3 box
+- **Then** I should see an error indicating the conflict
+
+## User Story 3: Solve the Puzzle
+**As a** user  
+**I want** the application to solve the Sudoku puzzle  
+**So that** I can see the solution
+
+### Acceptance Criteria
+- **Given** I have selected a puzzle and entered some numbers
+- **When** I click on the "Solve" button
+- **Then** the application should solve the puzzle using the selected solving method
+
+## User Story 4: Choose Solving Method
+**As a** user  
+**I want** to choose between different solving methods  
+**So that** I can see how different algorithms solve the puzzle
+
+### Acceptance Criteria
+- **Given** I am on the Sudoku solver page
+- **When** I select "Human Like" solving method
+- **Then** the application should solve the puzzle using human-like techniques
+
+- **Given** I am on the Sudoku solver page
+- **When** I select "Brute Force" solving method
+- **Then** the application should solve the puzzle using brute force algorithm
+
+- **Given** I am on the Sudoku solver page
+- **When** I select "Super Intelligence" solving method
+- **Then** the application should solve the puzzle using super intelligence algorithm
+
+## User Story 5: Highlighting and Feedback
+**As a** user  
+**I want** the application to highlight cells and provide feedback during solving  
+**So that** I can understand the solving process
+
+### Acceptance Criteria
+- **Given** the application is solving the puzzle
+- **When** it checks a cell
+- **Then** the cell should be highlighted
+
+- **Given** the application is solving the puzzle
+- **When** it finds an error
+- **Then** the erroneous cell should be highlighted and an error message should be displayed
+
+## User Story 6: Save and Load Puzzles
+**As a** user  
+**I want** to save my current puzzle and load it later  
+**So that** I can continue solving it at a later time
+
+### Acceptance Criteria
+- **Given** I am solving a puzzle
+- **When** I click on the "Save" button
+- **Then** the current state of the puzzle should be saved
+
+- **Given** I have saved a puzzle
+- **When** I click on the "Load" button
+- **Then** the saved puzzle should be loaded into the grid
+
+## User Story 7: Undo and Redo Actions
+**As a** user  
+**I want** to undo and redo my actions  
+**So that** I can correct mistakes or try different approaches
+
+### Acceptance Criteria
+- **Given** I have made changes to the grid
+- **When** I click on the "Undo" button
+- **Then** the last change should be reverted
+
+- **Given** I have undone a change
+- **When** I click on the "Redo" button
+- **Then** the reverted change should be reapplied
+
+## User Story 8: Add Custom Puzzles
+**As a** user  
+**I want** to add my custom puzzles to a database  
+**So that** I can share them or solve them later
+
+### Acceptance Criteria
+- **Given** I have created a custom puzzle
+- **When** I click on the "Add to Database" button
+- **Then** the puzzle should be saved to local storage (and eventually an online database)
+
+- **Given** I have created a custom puzzle
+- **When** I click on the "Add to Database" button
+- **Then** the application should check for duplicate puzzles by ensuring the puzzle's final answer or puzzle form are not transformations (mirror/rotate) of another Sudoku
+
+## User Story 9: Responsive Design
+**As a** user  
+**I want** the application to be responsive  
+**So that** I can use it on different devices
+
+### Acceptance Criteria
+- **Given** I am using the application on a desktop
+- **When** I resize the window
+- **Then** the layout should adjust accordingly
+
+- **Given** I am using the application on a mobile device
+- **When** I open the application
+- **Then** the layout should be optimized for mobile use
