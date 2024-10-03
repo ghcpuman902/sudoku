@@ -131,7 +131,7 @@ export function SudokuMaster() {
           row.map((cell, colIndex) => (
             <Input
               key={`${rowIndex}-${colIndex}`}
-              type="text"
+              type="number"
               inputMode="numeric"
               pattern="[1-9]"
               maxLength={1}
@@ -155,7 +155,7 @@ export function SudokuMaster() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+    <div className="bg-background flex items-center justify-center p-4 dark:text-black">
       <div className="relative">
         <Card className="w-full max-w-2xl">
           <CardHeader className="flex flex-row items-center justify-between">
@@ -217,7 +217,7 @@ export function SudokuMaster() {
         {isPuzzleListOpen && (
           <div 
             ref={puzzleListRef}
-            className="absolute top-0 right-0 mt-16 w-[250px] bg-white shadow-lg rounded-lg overflow-hidden"
+            className="absolute top-0 right-0 mt-16 w-[250px] bg-white text-black shadow-lg rounded-lg overflow-hidden"
           >
             <div className="p-4 border-b">
               <h2 className="text-xl font-bold">Puzzle List</h2>
