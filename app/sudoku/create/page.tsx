@@ -5,7 +5,8 @@ import React, { useState, useEffect } from 'react';
 import SudokuGrid from '../SudokuGrid';
 import { Grid, EMPTY_PUZZLE } from '../../../components/puzzles';
 import { Button } from '@/components/ui/button';
-import { solvers, countSolutions } from '@/components/algorithms';
+import { solvers } from '@/components/algorithms';
+import { cloneGrid, countSolutionsUpTo, hasUniqueSolution, normalizeGrid } from '@/components/puzzle-engine';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -25,9 +26,10 @@ export default function App() {
     const [isLoading, setIsLoading] = useState(false);
     const [isCheckingSolutions, setIsCheckingSolutions] = useState(false);
 
-    // Load custom puzzles from localStorage on client side
+    // Load after mount so server HTML matches first client paint (avoids hydration mismatch).
     useEffect(() => {
-        const storedPuzzles = JSON.parse(localStorage.getItem("customPuzzles") || "[]");
+        const storedPuzzles = JSON.parse(localStorage.getItem("customPuzzles") || "[]") as Grid[];
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- browser-only hydration from localStorage
         setCustomPuzzles(storedPuzzles);
     }, []);
 
@@ -89,8 +91,9 @@ export default function App() {
         const solver = solvers.find(s => s.name === solvingMethod);
         if (solver) {
             try {
-                const solutionGenerator = solver.solve([...grid]);
-                let finalGrid = [...grid];
+                const workingGrid = cloneGrid(normalizeGrid(grid));
+                const solutionGenerator = solver.solve(workingGrid);
+                let finalGrid: Grid = workingGrid;
                 for await (const partialGrid of solutionGenerator) {
                     finalGrid = partialGrid;
                     setGrid(partialGrid);
@@ -100,7 +103,7 @@ export default function App() {
                 } else {
                     setSolverResult("Solver did not complete the puzzle.");
                 }
-            } catch (error) {
+            } catch {
                 setSolverResult("An error occurred while solving the puzzle.");
             }
         }
@@ -128,13 +131,18 @@ export default function App() {
         try {
             setPossibleSolutions(null); // Reset the count before starting
             setSolverResult(null); // Clear any previous results
-            const solutionsCount = await countSolutions([...grid]);
-            if (solutionsCount < 100) {
+            const normalizedGrid = normalizeGrid(grid);
+            const unique = hasUniqueSolution(normalizedGrid);
+            const solutionsCount = countSolutionsUpTo(normalizedGrid, 101);
+            if (solutionsCount <= 100) {
                 setPossibleSolutions(solutionsCount);
+                if (unique) {
+                    setSolverResult("Puzzle has a unique solution.");
+                }
             } else {
                 setSolverResult("This puzzle has more than 100 possible solutions.");
             }
-        } catch (error) {
+        } catch {
             setPossibleSolutions(null);
             setSolverResult("An error occurred while counting solutions.");
         }
@@ -168,7 +176,7 @@ export default function App() {
 
     return (
         <div className="container mx-auto p-4 space-y-8">
-            <h1 className="text-3xl font-bold text-center">🆕 Create New Sudoku Puzzle</h1>
+            <h1 className="text-3xl font-bold text-center">Advanced Sudoku Tools</h1>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <Card className="md:row-span-2">
@@ -271,7 +279,7 @@ export default function App() {
                                 value={selectedPuzzleIndex !== null ? selectedPuzzleIndex.toString() : ""}
                                 onValueChange={(value) => loadPuzzle(Number(value))}
                             >
-                                <SelectTrigger id="loadPuzzle">
+                                <SelectTrigger id="loadPuzzle" className="w-full">
                                     <SelectValue placeholder="Select a saved puzzle" />
                                 </SelectTrigger>
                                 <SelectContent>

@@ -1,18 +1,25 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { Grid } from '../../components/puzzles';
 
 const GRID_SIZE = 9;
 
+const cloneGrid = (puzzle: Grid): Grid => JSON.parse(JSON.stringify(puzzle)) as Grid;
+
 const usePuzzle = (initialPuzzle: Grid) => {
-    const [grid, setGrid] = useState<Grid>(() => JSON.parse(JSON.stringify(initialPuzzle)));
-    const [history, setHistory] = useState<Grid[]>([JSON.parse(JSON.stringify(initialPuzzle))]);
+    const snapshotKey = JSON.stringify(initialPuzzle);
+    const [appliedKey, setAppliedKey] = useState(snapshotKey);
+
+    const [grid, setGrid] = useState<Grid>(() => cloneGrid(initialPuzzle));
+    const [history, setHistory] = useState<Grid[]>(() => [cloneGrid(initialPuzzle)]);
     const [historyIndex, setHistoryIndex] = useState(0);
 
-    useEffect(() => {
-        setGrid(JSON.parse(JSON.stringify(initialPuzzle)));
-        setHistory([JSON.parse(JSON.stringify(initialPuzzle))]);
+    if (snapshotKey !== appliedKey) {
+        setAppliedKey(snapshotKey);
+        const next = cloneGrid(initialPuzzle);
+        setGrid(next);
+        setHistory([cloneGrid(initialPuzzle)]);
         setHistoryIndex(0);
-    }, [initialPuzzle]);
+    }
 
     const isValid = useCallback((row: number, col: number, value: string): boolean => {
         if (!/^[1-9]$/.test(value)) {
